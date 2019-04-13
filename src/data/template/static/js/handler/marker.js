@@ -28,14 +28,22 @@ MarkerHandler.prototype.onMapChange = function(name, rotation) {
 		var icon = markerInfo.icon ? markerInfo.icon : groupInfo.icon;
 		var iconSize = markerInfo.iconSize ? markerInfo.iconSize : groupInfo.iconSize;
 
-		if(icon) {
-			marker.setIcon(new L.Icon({
-				// The icon URL itself may be given relative to "static/markers"
-				// or as an absolute URL (perhaps to a resource on a CDN).
-				iconUrl: icon.match(/^\w+:\/\//) ? icon : "static/markers/" + icon,
-				iconSize: (iconSize ? iconSize : [24, 24]),
-			}));
-		}
+                if(icon) {
+                        var iconUrl;
+                        if (icon === '<playername>') {
+                                iconUrl = 'https://minotar.net/helm/' + markerInfo.title + '/32';
+                        } else if (icon.match(/^\w+:\/\//)) {
+                                // The icon URL itself may be given relative to "static/markers"
+                                // or as an absolute URL (perhaps to a resource on a CDN).
+                                iconUrl = icon;
+                        } else {
+                                iconUrl = "static/markers/" + icon;
+                        }
+                        marker.setIcon(new L.Icon({
+                                iconUrl: iconUrl,
+                                iconSize: (iconSize ? iconSize : [24, 24]),
+                        }));
+                }
 		marker.bindPopup(markerInfo.text ? markerInfo.text : markerInfo.title);
 		return marker;
 	};
